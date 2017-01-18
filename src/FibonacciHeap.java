@@ -47,7 +47,7 @@ public class FibonacciHeap {
     	this.numOfTree ++;
     	HeapNode node = new HeapNode(key);
     	
-    	if (this.size() == 0){
+    	if (this.size() == 1){
     		this.min = node;
     		node.setPrev(node);
     		node.setNext(node);
