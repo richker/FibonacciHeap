@@ -4,7 +4,6 @@
  * An implementation of fibonacci heap over non-negative integers.
  */
 public class FibonacciHeap {
-	private HeapNode first;
 	private HeapNode min;
 	private int size;
 	private int numOfTree;
@@ -40,17 +39,16 @@ public class FibonacciHeap {
     	
     	if (this.size() == 0){
     		this.min = node;
-    		this.first = node;
     		node.setPrev(node);
     		node.setNext(node);
     	}else{
     		if (this.min.getKey() > key){
     			this.min = node;
     		}
-    		node.setPrev(this.first.prev);
-    		this.first.prev.setNext(node);
-    		node.setNext(first);
-    		first.setPrev(node);
+    		node.setNext(this.min.getNext());
+    		this.min.setNext(node);
+    		node.setPrev(min);
+    		node.getNext().setPrev(node);
     	}
     	return node;
     }
