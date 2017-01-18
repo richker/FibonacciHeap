@@ -144,7 +144,11 @@ public class FibonacciHeap {
     public void decreaseKey(HeapNode x, int delta)
     {   
     	x.setKey(x.getKey()-delta);
-    	
+    	HeapNode y = x.getParent();
+    	if (y != null && x.getKey() < y.getKey()){
+    		cascadingCut (x,y);
+    	}
+    	this.insert(x.getKey());
     	return;
     }
     
