@@ -8,6 +8,15 @@ public class FibonacciHeap {
 	private int size;
 	private int numOfTree;
 	private int numOfMarked;
+	private static int totalCuts;
+	private static int totalLinks;
+	
+	public FibonacciHeap(){
+		this.size = 0;
+		this.numOfMarked = 0;
+		this.numOfTree = 0;
+
+	}
 
    /**
     * public boolean empty()
@@ -35,6 +44,7 @@ public class FibonacciHeap {
     public HeapNode insert(int key)
     {   
     	this.size ++;
+    	this.numOfTree ++;
     	HeapNode node = new HeapNode(key);
     	
     	if (this.size() == 0){
@@ -87,7 +97,22 @@ public class FibonacciHeap {
     */
     public void meld (FibonacciHeap heap2)
     {
-    	  return; // should be replaced by student code   		
+    	HeapNode min2 = heap2.findMin();
+    	//change pointers
+    	this.min.getNext().setPrev(min2.getPrev());
+    	min2.getPrev().setNext(this.min.getNext());
+    	this.min.setNext(min2);
+    	this.min.getNext().setPrev(this.min);
+    	
+    	if (this.findMin().getKey() > min2.getKey()){
+    		this.min = min2;
+    	}
+    	
+    	this.size += heap2.size();
+    	this.numOfMarked += heap2.numOfMarked;
+    	this.numOfTree += heap2.numOfTree;
+    	
+    	  return;		
     }
 
    /**
@@ -154,7 +179,11 @@ public class FibonacciHeap {
     
     /** Cut x from its parent y **/
     public void cut (HeapNode x, HeapNode y){
+    	totalCuts ++;
     	x.setParent(null);
+    	if (x.isMark()){
+    		this.numOfMarked--;
+    	}
     	x.setMark(false);
     	y.setRank(y.getRank()-1); //deacrese the rank of y by 1
     	if (x.getNext() == x){
@@ -172,6 +201,7 @@ public class FibonacciHeap {
     	if (y.getParent() != null){
     		if (!y.isMark()){
     			y.setMark(true);
+    			this.numOfMarked++;
     		}else{
     			cascadingCut(y, y.getParent());
     		}
@@ -200,7 +230,7 @@ public class FibonacciHeap {
     */
     public static int totalLinks()
     {    
-    	return 0; // should be replaced by student code
+    	return totalLinks;
     }
 
    /**
@@ -211,7 +241,7 @@ public class FibonacciHeap {
     */
     public static int totalCuts()
     {    
-    	return 0; // should be replaced by student code
+    	return totalCuts;
     }
     
    /**
