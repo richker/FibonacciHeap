@@ -142,10 +142,38 @@ public class FibonacciHeap {
     * to reflect this chage (for example, the cascading cuts procedure should be applied if needed).
     */
     public void decreaseKey(HeapNode x, int delta)
-    {    
-    	return; // should be replaced by student code
+    {   
+    	x.setKey(x.getKey()-delta);
+    	
+    	return;
+    }
+    
+    /** Cut x from its parent y **/
+    public void cut (HeapNode x, HeapNode y){
+    	x.setParent(null);
+    	x.setMark(false);
+    	y.setRank(y.getRank()-1); //deacrese the rank of y by 1
+    	if (x.getNext() == x){
+    		y.setChild(null);
+    	}else{
+    		y.setChild(x.getNext());
+    		x.getPrev().setNext(x.getNext());
+    		x.getNext().setPrev(x.getPrev());
+    	}
     }
 
+    /** Perform a cascading-cut process starting at x **/
+    public void cascadingCut (HeapNode x, HeapNode y){
+    	cut (x,y);
+    	if (y.getParent() != null){
+    		if (!y.isMark()){
+    			y.setMark(true);
+    		}else{
+    			cascadingCut(y, y.getParent());
+    		}
+    	}
+    }
+    
    /**
     * public int potential() 
     *
