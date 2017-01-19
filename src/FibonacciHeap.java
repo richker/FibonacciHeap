@@ -47,7 +47,7 @@ public class FibonacciHeap {
     	this.numOfTree ++;
     	HeapNode node = new HeapNode(key);
     	
-    	if (this.size() == 0){
+    	if (this.size() == 1){
     		this.min = node;
     		node.setPrev(node);
     		node.setNext(node);
@@ -112,7 +112,7 @@ public class FibonacciHeap {
     	this.numOfMarked += heap2.numOfMarked;
     	this.numOfTree += heap2.numOfTree;
     	
-    	  return;		
+    	return;		
     }
 
    /**
@@ -160,6 +160,7 @@ public class FibonacciHeap {
     	return; // should be replaced by student code
     }
 
+
    /**
     * public void decreaseKey(HeapNode x, int delta)
     *
@@ -169,11 +170,23 @@ public class FibonacciHeap {
     public void decreaseKey(HeapNode x, int delta)
     {   
     	x.setKey(x.getKey()-delta);
+    	
     	HeapNode y = x.getParent();
     	if (y != null && x.getKey() < y.getKey()){
     		cascadingCut (x,y);
     	}
-    	this.insert(x.getKey());
+    	
+    	//insert x after delete to root list
+		x.setNext(this.min.getNext());
+		this.min.setNext(x);
+		x.setPrev(min);
+		x.getNext().setPrev(x);
+		
+		if (x.getKey() < this.min.getKey()){
+			this.min = x;
+		}
+		
+		this.numOfTree ++;
     	return;
     }
     
